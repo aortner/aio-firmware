@@ -14,6 +14,8 @@ AgOpenGPS AIO-Controller von [www.autosteer.cc](https://www.autosteer.cc) (Teens
   - [Kompass und Neigungssensor](#kompass-und-neigungssensor) · [GNSS-Receiver](#gnss-receiver) · [Ethernet](#ethernet-anschluss)
   - [Relais](#relais) · [Motor Enable/Brake-Jumper](#motor-enablebrake-jumper)
 - [Webinterface](#webinterface)
+  - [DUAL GNSS](#dual-gnss) · [MCP23017 Relay Card](#mcp23017-relay-card) · [Speed Pulse](#speed-pulse)
+  - [Motor Controller](#motor-controller) · [Motor Test](#motor-test) · [CAN-Bus-Lenkung](#can-bus-lenkung) · [Analog 12V](#analog-12v-pin-a13)
   - [PCB Relay Function](#pcb-relay-function) · [Kick PWM und Kick Dauer](#kick-pwm-und-kick-dauer) · [Gyro WAS (in Entwicklung)](#gyro-was-in-entwicklung)
 - [Firmware-Update](#firmware-update)
 
@@ -212,6 +214,87 @@ Bei Verwendung eines DC-Motors muss ein Jumper auf einem der beiden Steckplätze
 Im Browser die IP-Adresse des Controllers öffnen (`http://<IP-des-Controllers>`). Dort werden Motor, CAN-Marke,
 Relais, Eingänge usw. eingestellt und Live-Werte angezeigt. Der Button **Anleitung** führt zu dieser Seite.
 Einstellungen wirken sofort und bleiben nach dem Ausschalten gespeichert.
+
+### DUAL GNSS
+
+- **Ein:** Alle Daten vom GNSS-Receiver werden **1:1 an AgOpenGPS weitergeleitet** (UDP-Port 9999), ohne Auswertung im
+  Controller. Für Receiver, die selbst Position und Heading liefern (z. B. Dual-Antennen-Receiver).
+- **Aus:** Der Controller liest GGA/VTG des Receivers (z. B. F9P Single) und schickt sie zusammen mit Kompass und
+  Neigung (BNO085) an AgOpenGPS.
+
+### MCP23017 Relay Card
+
+Aktiviert die optionale **Relaiskarte für 8 Teilbreiten** (I2C-Portexpander MCP23017). Die Relais 1–8 folgen den
+Teilbreiten 1–8 aus AgOpenGPS. Wird die Karte beim Start nicht gefunden, zeigt die Live-Ansicht „MCP23017 NOT FOUND“.
+
+### Speed Pulse
+
+Gibt ein **12-V-Geschwindigkeitssignal** aus (Rechtecksignal, z. B. für Sämaschine oder Spritze):
+**130 Impulse pro Meter** – 3,6 km/h (1 m/s) ergibt 130 Hz. Grundlage ist die GPS-Geschwindigkeit; unter ca.
+0,1 km/h und ohne aktuelle Daten von AgOpenGPS (länger als 1 s) wird kein Signal ausgegeben.
+
+### Motor Controller
+
+| Einstellung | Motor | Anschluss |
+|---|---|---|
+| PWM | integrierter Motorcontroller (DC-Motor oder Proportionalventil) | Motor A/B |
+| Keya | Keya-Lenkmotor | CAN2, **250 000 Baud** |
+| AllyNav | Allynav-Lenkmotor | CAN2, Baudrate wählbar: **250 000 für den blauen**, **500 000 für den roten** Motor |
+| CAN-Bus | Lenkventil des Traktors über CAN | siehe [CAN-Bus-Lenkung](#can-bus-lenkung) |
+
+Bei Keya und AllyNav erscheint die Auswahl der Baudrate und der Motortest. Die Live-Ansicht zeigt, ob der Motor
+erkannt wurde, Fehlermeldungen, Position sowie Soll- und Ist-Drehzahl. Der Motorstrom geht an AgOpenGPS und kann
+dort als Stromsensor zum Abschalten der Lenkung beim Eingreifen ins Lenkrad genutzt werden.
+
+### Motor Test
+
+Nur bei Keya und AllyNav. Die Buttons **◀ Links 1s** und **Rechts 1s ▶** schalten den Motor ein, drehen ihn
+**1 Sekunde mit ca. 10 %** in die gewählte Richtung und schalten ihn wieder aus. So lassen sich Anschluss,
+Baudrate und Drehrichtung prüfen, ohne AgOpenGPS zu starten.
+
+Der Test geht nur bei ausgeschalteter Autolenkung. Wird während des Tests die Lenkung aktiv, übernimmt sie sofort.
+
+### CAN-Bus-Lenkung
+
+Motor Controller **CAN-Bus** wählen, dann unter **CAN-Bus Brand** den Traktor. Die Karte **Anschlüsse** zeigt, welche
+CAN-Busse belegt sind:
+
+| Marke | Anschlüsse |
+|---|---|
+| Claas | CAN3 (V-Bus): Lenkung, Engage, Work-Switch |
+| Valtra/MF | CAN3 (V-Bus): Lenkung, Engage · CAN1 (K-Bus): Engage-Button, Heckhubwerk |
+| CaseIH | CAN3 (V-Bus): Lenkung, Engage · CAN1 (K-Bus): Engage, Heckhubwerk |
+| Fendt | CAN3 (V-Bus): Lenkung · CAN1 (K-Bus): Armlehnen-Tasten · CAN2 (ISO-Bus): Engage |
+| JCB | CAN3 (V-Bus): Lenkung, Engage |
+| FendtOne | CAN3 (V-Bus): Lenkung (500 kBaud) · CAN1 (K-Bus): Engage (500 kBaud) |
+| Lindner | CAN3 (V-Bus): Lenkung, Engage |
+| AgOpenGPS | CAN3 (V-Bus): Lenkung + Lenkwinkel-Rückmeldung |
+| Cat MT-Late | CAN3 (V-Bus): Lenkung, Engage, Rückwärts-Erkennung · CAN1 (K-Bus): Engage |
+| Cat MT-Early | CAN3 (V-Bus): Lenkung, Engage, Rückwärts-Erkennung · CAN1 (K-Bus): Engage |
+| Deutz | CAN3 (V-Bus): Lenkung · CAN1 (K-Bus): Engage, Joystick |
+
+- Baudrate 250 kBaud, nur FendtOne 500 kBaud – stellt der Controller selbst ein.
+- Der Lenkwinkelsensor wird weiterhin gebraucht; nur bei **AgOpenGPS** kommt der Lenkwinkel über CAN.
+- „Engage“ = Lenkung am Traktor ein-/ausschalten (Taste/Joystick des Traktors), „Work-Switch“/„Heckhubwerk“ geben
+  den Arbeitsschalter an AgOpenGPS weiter.
+- Die Live-Ansicht zeigt Ventilstatus (Valve Ready), Engage, Arbeitsstellung, Ventildruck und -strom.
+- **Reset CAN** startet die CAN-Busse neu. **CAN Debug** zeigt die CAN-Nachrichten live (zur Fehlersuche).
+- Abschlusswiderstände (Jumper) je nach Verkabelung am Traktor – siehe [CAN-Bus](#can-bus).
+
+### Analog 12V (Pin A13)
+
+Der 0–12-V-Analogeingang (Teensy-Pin A13 = 27) kann eine von vier Aufgaben übernehmen. Die gemessene Spannung wird
+in der Live-Ansicht angezeigt.
+
+| Einstellung | Was passiert |
+|---|---|
+| None | keine Funktion, nur Anzeige der Spannung |
+| Steer Switch | Lenkschalter über ein 12-V-Signal: Liegt die Spannung über der **Schwelle**, gilt der Schalter als betätigt. Ersetzt den Steer-Schalter (S) in der Meldung an AgOpenGPS. |
+| Work Switch | Arbeitsschalter über ein 12-V-Signal (z. B. Hubwerk- oder Zapfwellensignal): über der **Schwelle** = Arbeit ein. Ersetzt den Work-Schalter (W). |
+| Pressure Sensor | Der Eingang dient als Drucksensor (z. B. Lenkdruck). Steigt der Wert über die in AgOpenGPS eingestellte Druck-Schwelle, schaltet die Lenkung ab (Eingreifen ins Lenkrad). In AgOpenGPS den Drucksensor aktivieren. |
+
+Die **Schwelle** (0–12 V in 0,1-V-Schritten) erscheint bei Steer Switch und Work Switch. Am besten die Spannung
+im ein- und ausgeschalteten Zustand in der Live-Ansicht ablesen und die Schwelle dazwischen legen.
 
 ### PCB Relay Function
 
