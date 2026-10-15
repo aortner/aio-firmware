@@ -14,6 +14,7 @@ AgOpenGPS AIO-Controller von [www.autosteer.cc](https://www.autosteer.cc) (Teens
   - [Kompass und Neigungssensor](#kompass-und-neigungssensor) · [GNSS-Receiver](#gnss-receiver) · [Ethernet](#ethernet-anschluss)
   - [Relais](#relais) · [Motor Enable/Brake-Jumper](#motor-enablebrake-jumper)
 - [Webinterface](#webinterface)
+  - [PCB Relay Function](#pcb-relay-function) · [Kick PWM und Kick Dauer](#kick-pwm-und-kick-dauer) · [Gyro WAS (in Entwicklung)](#gyro-was-in-entwicklung)
 - [Firmware-Update](#firmware-update)
 
 ## PCB-Details
@@ -191,7 +192,8 @@ Hier das Netzwerkkabel anschließen.
 
 ![Relais](bilder/relais.jpg)
 
-Die Funktion der beiden Relais wird im Webinterface eingestellt.
+Die Funktion der beiden Relais wird im Webinterface unter **PCB Relay 1 Function** bzw. **PCB Relay 2 Function**
+eingestellt (siehe [PCB Relay Function](#pcb-relay-function)).
 
 ### Motor Enable/Brake-Jumper
 
@@ -209,6 +211,53 @@ Bei Verwendung eines DC-Motors muss ein Jumper auf einem der beiden Steckplätze
 
 Im Browser die IP-Adresse des Controllers öffnen (`http://<IP-des-Controllers>`). Dort werden Motor, CAN-Marke,
 Relais, Eingänge usw. eingestellt und Live-Werte angezeigt. Der Button **Anleitung** führt zu dieser Seite.
+Einstellungen wirken sofort und bleiben nach dem Ausschalten gespeichert.
+
+### PCB Relay Function
+
+Für jedes der beiden Relais auf der Platine wird festgelegt, wann es anzieht:
+
+| Einstellung | Relais zieht an, wenn … |
+|---|---|
+| None | nie (Relais aus) |
+| Autosteer | die Autolenkung aktiv ist |
+| Tramline | AgOpenGPS eine Fahrgasse meldet |
+| Hitch Up | AgOpenGPS „Hubwerk heben“ meldet |
+| Hitch Down | AgOpenGPS „Hubwerk senken“ meldet |
+| Section 1 | Teilbreite 1 in AgOpenGPS eingeschaltet ist |
+| Section 2 | Teilbreite 2 in AgOpenGPS eingeschaltet ist |
+| Geo Stop | AgOpenGPS einen Geo-Stopp meldet |
+
+### Kick PWM und Kick Dauer
+
+Nur sichtbar bei Motor Controller **PWM** (integrierter Motorcontroller, Cytron oder IBT-2).
+
+Manche Lenkmotoren laufen bei kleinem PWM nicht an (Losbrechmoment), oder sie hängen kurz, wenn die Drehrichtung
+wechselt. Der Kick gibt bei jedem Richtungswechsel einen kurzen, kräftigeren Impuls:
+
+- **Kick PWM** (0–255): Mindest-PWM während des Impulses. **0 = Kick aus** (Standard).
+- **Kick Dauer** (0–255 ms, in 5-ms-Schritten): so lange gilt der Mindest-PWM nach dem Richtungswechsel. 0 = aus.
+
+Ist der geregelte PWM ohnehin größer, bleibt er unverändert. Ein Richtungswechsel zählt erst, wenn er zwei
+Regelzyklen (50 ms) ansteht – so löst Sensorrauschen um den Sollwert keinen Dauer-Kick aus.
+
+Einstellen: mit Kick PWM 0 beginnen, dann langsam erhöhen (z. B. 80–120) bei 20–50 ms, bis der Motor bei kleinen
+Korrekturen sauber anläuft. Zu viel führt zu Zittern um die Spur.
+
+### Gyro WAS (in Entwicklung)
+
+> **In Entwicklung – nicht für den normalen Betrieb.** Standardmäßig ausgeschaltet.
+
+Statt eines Lenkwinkelsensors soll ein Gyro-Sensor am Achsschenkel (Forsense FSS-G200, CAN) zusammen mit dem
+GNSS-Heading den Lenkwinkel bestimmen. Mit dem Schalter **Gyro WAS** wird die Funktion freigeschaltet:
+
+- **Aus** (Standard): Der Controller sucht keinen Gyro, CAN3 bleibt frei, gelenkt wird mit dem Lenkwinkelsensor.
+- **Ein**: Der Gyro wird an CAN3 gesucht, zusätzliche Anzeigen (Gyro, Heading, Gyro-Winkel, Lenkwinkel-Quelle,
+  Aufzeichnung) erscheinen. Die Lenkwinkel-Quelle kann zwischen WAS und Gyro umgeschaltet werden.
+  Ist bei Quelle Gyro der Gyro-Winkel ungültig, schaltet die Lenkung ab.
+
+Nicht nutzbar zusammen mit einem CAN-Lenkventil (CAN3 ist dann belegt). Umschalten nur bei ausgeschalteter
+Lenkung.
 
 ## Firmware-Update
 
