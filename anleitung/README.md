@@ -157,10 +157,6 @@ Traktor-Symbol: **grün** Lenken aktiviert · **rot** Lenken aus · **orange** k
 Schalter zum Aktivieren der Aufzeichnung (potentialfrei, Masse auf Masse). Muss in der AgOpenGPS-Konfiguration
 entsprechend eingestellt werden.
 
-#### Brücke S+W
-
-Aktiviert die Aufzeichnung gemeinsam mit dem Lenken.
-
 #### 12-V-Eingänge für Work/Steer (ACTIVE)
 
 ![12-V-Eingänge](bilder/eingaenge-12v.jpg)
@@ -227,6 +223,14 @@ Hier das Netzwerkkabel anschließen.
 ### Relais
 
 ![Relais](bilder/relais.jpg)
+
+Je Relais drei Klemmen, max. 5 A:
+
+- **COM**: Eingang für die Spannung, die geschaltet werden soll
+- **NO** (normally open): bekommt die Spannung, wenn das Relais angezogen hat
+- **NC** (normally closed): bekommt die Spannung, wenn das Relais abgefallen ist
+
+COM wird also zwischen NC und NO umgeschaltet.
 
 Die Funktion der beiden Relais wird im Webinterface unter **PCB Relay 1 Function** bzw. **PCB Relay 2 Function**
 eingestellt (siehe [PCB Relay Function](#pcb-relay-function)).
