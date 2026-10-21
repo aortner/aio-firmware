@@ -13,7 +13,7 @@ AgOpenGPS AIO-Controller von [www.autosteer.cc](https://www.autosteer.cc) (Teens
   - [USB](#usb-anschluss) · [Spannungsversorgung](#spannungsversorgung-der-platine) · [Einschalter](#einschalter-onoff) · [Eingänge](#eingänge)
   - [Lenkwinkelsensor](#lenkwinkelsensor) · [Analogeingänge](#12-v--und-5-v-analogeingänge) · [CAN-Bus](#can-bus)
   - [Kompass und Neigungssensor](#kompass-und-neigungssensor) · [GNSS-Receiver](#gnss-receiver) · [Ethernet](#ethernet-anschluss)
-  - [Relais](#relais) · [Motor Enable/Brake-Jumper](#motor-enablebrake-jumper)
+  - [Relais](#relais)
 - [Webinterface](#webinterface)
   - [DUAL GNSS](#dual-gnss) · [MCP23017 Relay Card](#mcp23017-relay-card) · [Speed Pulse](#speed-pulse)
   - [Motor Controller](#motor-controller) · [Motor Test](#motor-test) · [CAN-Bus-Lenkung](#can-bus-lenkung) · [Analog 12V](#analog-12v-pin-a13)
@@ -39,7 +39,8 @@ AgOpenGPS AIO-Controller von [www.autosteer.cc](https://www.autosteer.cc) (Teens
 **Eingänge**
 - Ein/Aus-Schalter
 - 4 Digitaleingänge (3 + 1 Interrupt), potentialfrei (GND auf GND) – Schalter für Lenken, Arbeit, Remote
-- 3 × 12-V-Eingänge für Lenken, Arbeit, Remote
+  (derzeit ohne Funktion) und Encoder
+- 2 × 12-V-Eingänge für Lenken und Arbeit
 - Lenkwinkelsensor
 - 1 × analog 0–5 V
 - 1 × analog 0–12 V
@@ -82,7 +83,7 @@ Beschriftung wie auf der Platine.
 | POWER | ON/OFF · LED (a, k) | Einschalter (Brücke) und LED |
 | RELAY | NO · COM · NC (Relais 1 und 2) | 2 Relais, max. 5 A |
 | ANALOG INPUT | 12V · GND · 5V · GND | 0–12-V- und 0–5-V-Analogeingang |
-| TM171 | TX · RX · 5V · GND | serielle Schnittstelle |
+| TM171 | TX · RX · 5V · GND | serielle Schnittstelle (Anleitung folgt) |
 | WHEEL ANGLE SENSOR | DIF (A1) · SIG · GND · 5V | Lenkwinkelsensor |
 | SPEEDPULSE | 12V · GND (Lötpunkte) | Geschwindigkeitssignal |
 | BNO085 | Steckplatz, Lötbrücke RVC mode | Kompass und Neigungssensor |
@@ -95,9 +96,9 @@ Beschriftung wie auf der Platine.
 
 | Anschluss | Klemmen | Funktion |
 |---|---|---|
-| STEER ON/OFF | 5V · E · GND · 12V · S · GND | E = Encoder-Eingang, S = Lenkschalter gegen GND |
-| WORK ON/OFF · REMOTE ON/OFF | W · GND · R · GND | Arbeitsschalter und Remote-Schalter gegen GND |
-| ACTIVE | WORK − + · STEER − + | 12-V-Eingänge für Work und Steer (Optokoppler) |
+| STEER ON/OFF | 5V · E · GND · 12V · S · GND | E–GND = Encoder-Eingang, S–GND = Lenkschalter (potentialfrei) |
+| WORK ON/OFF · REMOTE ON/OFF | W · GND · R · GND | W–GND = Arbeitsschalter, R–GND = Remote (derzeit ohne Funktion), potentialfrei |
+| ACTIVE | WORK − + · STEER − + | Work und Steer mit 12 V schalten (Optokoppler) |
 | CAN BUS | HI · LO für CAN1, CAN2, CAN3 | 3 CAN-Busse |
 | Can1 · Can2 · Can3 | Schiebeschalter „120ohm TERM ON/OFF“ | Abschlusswiderstand je CAN-Bus |
 | REMOTE LED · WORK LED · STEER LED | a · k (Lötpunkte) | Anschluss für externe LEDs |
@@ -105,14 +106,12 @@ Beschriftung wie auf der Platine.
 
 ### USB-Anschluss
 
-![USB-Anschluss](bilder/usb.png)
-
 Der USB-Anschluss am Teensy wird nur zum Programmieren benötigt. Firmware-Updates gehen auch über Ethernet
 (siehe [Firmware-Update](#firmware-update)).
 
 ### Spannungsversorgung der Platine
 
-![Spannungsversorgung](bilder/versorgung.png)
+![Spannungsversorgung](bilder/versorgung.jpg)
 
 12 V vom Traktor (die Spannung am Traktor liegt zwischen 12 und 14 V), **mit 10 A absichern**.
 
@@ -124,10 +123,11 @@ Der USB-Anschluss am Teensy wird nur zum Programmieren benötigt. Firmware-Updat
   zu betreiben (dreht schneller).
 - **Motor A und B** ist der Anschluss für den Lenkmotor. Hier kann auch ein 0–12-V-Proportionalventil angeschlossen
   werden (+ je Seite auf Motor A und B, Masse vom Traktor nehmen).
+- Der Motorcontroller wird vom Teensy aktiviert. Eine Bremsfunktion im Stillstand gibt es nicht.
 
 ### Einschalter ON/OFF
 
-![Einschalter](bilder/einschalter.png)
+![Einschalter](bilder/einschalter.jpg)
 
 Die Brücke bei ON/OFF schaltet das Board ein – das schwarze Relais zieht an, und der Motorcontroller bzw. der
 12-V-Ausgang hat Strom. Hier kann ein externer Schalter verbaut werden. Daneben ist ein Anschluss für eine LED.
@@ -135,6 +135,10 @@ Die Brücke bei ON/OFF schaltet das Board ein – das schwarze Relais zieht an, 
 ### Eingänge
 
 ![Eingänge](bilder/eingaenge.jpg)
+
+Die Schalter an **S**, **W** und **R** sind potentialfrei und werden gegen **GND** geschaltet. Mit 12 V schaltet man
+Work und Steer über die Klemmen **ACTIVE** (siehe unten). **R** (Remote) hat derzeit keine Funktion,
+**E**–**GND** ist der Encoder-Eingang.
 
 #### Steer on/off – S auf GND
 
@@ -153,24 +157,21 @@ Traktor-Symbol: **grün** Lenken aktiviert · **rot** Lenken aus · **orange** k
 Schalter zum Aktivieren der Aufzeichnung (potentialfrei, Masse auf Masse). Muss in der AgOpenGPS-Konfiguration
 entsprechend eingestellt werden.
 
-![Work-Schalter](bilder/work.png)
-
 #### Brücke S+W
-
-![Brücke S+W](bilder/bruecke-sw.png)
 
 Aktiviert die Aufzeichnung gemeinsam mit dem Lenken.
 
-#### 12-V-Eingänge für Work/Steer
+#### 12-V-Eingänge für Work/Steer (ACTIVE)
 
-![12-V-Eingänge](bilder/eingaenge-12v.png)
+![12-V-Eingänge](bilder/eingaenge-12v.jpg)
 
-Will man Steer, Work oder Remote mit einem 12-V-Signal aktivieren, benutzt man diese Anschlüsse.
+Will man Work oder Steer mit einem 12-V-Signal aktivieren, legt man an **WORK − +** bzw. **STEER − +** die
+Spannung an (+ auf +, − auf −).
 **Achtung: Es müssen immer 12 V und GND vom externen Schalter verwendet werden!**
 
 ### Lenkwinkelsensor
 
-![Lenkwinkelsensor](bilder/lenkwinkelsensor.png)
+![Lenkwinkelsensor](bilder/lenkwinkelsensor.jpg)
 
 - **5 V** und **GND** als Versorgung für den Sensor, das Signal des Sensors auf **Signal**.
 - Bei einem bestehenden Lenkwinkelsensor das Signal vorher mit einem Multimeter prüfen:
@@ -180,14 +181,9 @@ Will man Steer, Work oder Remote mit einem 12-V-Signal aktivieren, benutzt man d
 - Bei vorgerüsteten Sensoren braucht man nur GND und Signal vom Sensor: Signal auf **Signal**, GND wird mit **A1**
   verbunden. Die Software liest dann differentiell (A/D-Wandler ADS1115).
 
-![Anbindung Kompass und Neigungssensor](bilder/kompass-qwiic.png)
-
-Anbindung Kompass und Neigungssensor: Das interne Modul wird über den QWIIC-Stecker mit der Hauptplatine oder der
-Relaisplatine verbunden.
-
 ### 12-V- und 5-V-Analogeingänge
 
-![Analogeingänge](bilder/analog.png)
+![Analogeingänge](bilder/analog.jpg)
 
 | Eingang | Teensy-Pin |
 |---|---|
@@ -199,11 +195,9 @@ Arbeitsschalter, Drucksensor) und die Schaltschwelle werden im Webinterface eing
 
 **Stromsensor:** ist direkt mit dem Motorcontroller verbunden und kann in AgOpenGPS aktiviert werden.
 
-![Stromsensor](bilder/stromsensor.png)
-
 ### CAN-Bus
 
-![CAN-Bus](bilder/canbus.png)
+![CAN-Bus](bilder/canbus.jpg)
 
 Je CAN-Bus ist ein 120-Ω-Abschlusswiderstand auf der Platine verbaut. Er wird mit dem Schiebeschalter
 **Can1**, **Can2** bzw. **Can3** („120ohm TERM ON/OFF“) neben der Ethernet-Buchse eingeschaltet.
@@ -211,20 +205,22 @@ Für Allynav-Motoren den Abschlusswiderstand an CAN2 einschalten.
 
 ### Kompass und Neigungssensor
 
-![Kompass und Neigungssensor](bilder/kompass.png)
+![Kompass und Neigungssensor](bilder/kompass.jpg)
 
 UART im **RVC-Modus** – wird unterstützt und ist der Standard für den BNO085. Wird der Kompass inkl. Montage
 bestellt, wird er fix auf der Platine verbaut.
 
+Daneben liegt der QWIIC-Stecker (**qwiic i2c**) für I2C-Geräte, z. B. die Relaiskarte.
+
 ### GNSS-Receiver
 
-![GNSS-Steckplatz](bilder/gnss.png)
+![GNSS-Steckplatz](bilder/gnss.jpg)
 
 Steckplatz im UNO-Format für Septentrio oder F9P (Single). Für Bynav-Receiver wird ein Adapterboard mitgeliefert.
 
 ### Ethernet-Anschluss
 
-![Ethernet](bilder/ethernet.png)
+![Ethernet](bilder/ethernet.jpg)
 
 Hier das Netzwerkkabel anschließen.
 
@@ -234,16 +230,6 @@ Hier das Netzwerkkabel anschließen.
 
 Die Funktion der beiden Relais wird im Webinterface unter **PCB Relay 1 Function** bzw. **PCB Relay 2 Function**
 eingestellt (siehe [PCB Relay Function](#pcb-relay-function)).
-
-### Motor Enable/Brake-Jumper
-
-![Motor Enable/Brake-Jumper](bilder/motor-jumper.png)
-
-Bei Verwendung eines DC-Motors muss ein Jumper auf einem der beiden Steckplätze sitzen.
-
-- **Enable** (Auslieferung): Die zwei Tasten sind nicht aktiv, der Motorcontroller muss erst von AgOpenGPS aktiviert
-  werden. Vorteil: Im Leerlauf hat der Motorcontroller keine Bremswirkung (Widerstand).
-- **Brake**: Controller immer aktiv, bremst im Stillstand, Tasten benutzbar.
 
 ## Webinterface
 
