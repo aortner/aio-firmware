@@ -2,13 +2,14 @@
 
 AgOpenGPS AIO-Controller von [www.autosteer.cc](https://www.autosteer.cc) (Teensy 4.1).
 
-![Platine PCB Version 2026](bilder/platine.jpg)
+![Platine PCB Version 2026](bilder/platine-2026.jpg)
 
 ## Inhalt
 
 - [PCB-Details](#pcb-details)
 - [Technische Daten](#technische-daten)
 - [Anschlüsse](#anschlüsse)
+  - [Übersicht](#übersicht-der-anschlüsse)
   - [USB](#usb-anschluss) · [Spannungsversorgung](#spannungsversorgung-der-platine) · [Einschalter](#einschalter-onoff) · [Eingänge](#eingänge)
   - [Lenkwinkelsensor](#lenkwinkelsensor) · [Analogeingänge](#12-v--und-5-v-analogeingänge) · [CAN-Bus](#can-bus)
   - [Kompass und Neigungssensor](#kompass-und-neigungssensor) · [GNSS-Receiver](#gnss-receiver) · [Ethernet](#ethernet-anschluss)
@@ -65,6 +66,42 @@ AgOpenGPS AIO-Controller von [www.autosteer.cc](https://www.autosteer.cc) (Teens
 | Normen | RoHS-konform |
 
 ## Anschlüsse
+
+### Übersicht der Anschlüsse
+
+Beschriftung wie auf der Platine.
+
+![Versorgung, Motor, Relais und GNSS](bilder/platine-2026-versorgung-gnss.jpg)
+
+| Anschluss | Klemmen | Funktion |
+|---|---|---|
+| INPUT | BAT+ · BAT− | Versorgung 12 V vom Traktor (10 A absichern). LED **REVERSE INPUT POLARITY** = verpolt |
+| OUTPUT | GND · +12V | geschaltete 12 V nach dem Relais (Brücke zu INPUT MOTOR CONTROLLER) |
+| INPUT MOTOR CONTROLLER | GND · 6–30V | Versorgung des Motorcontrollers |
+| MOTOR | B · A | Lenkmotor bzw. Proportionalventil; LEDs zeigen die Drehrichtung, dazu LEDs **OVERCURRENT** und **ERROR** |
+| POWER | ON/OFF · LED (a, k) | Einschalter (Brücke) und LED |
+| RELAY | NO · COM · NC (Relais 1 und 2) | 2 Relais, max. 5 A |
+| ANALOG INPUT | 12V · GND · 5V · GND | 0–12-V- und 0–5-V-Analogeingang |
+| TM171 | TX · RX · 5V · GND | serielle Schnittstelle |
+| WHEEL ANGLE SENSOR | DIF (A1) · SIG · GND · 5V | Lenkwinkelsensor |
+| SPEEDPULSE | 12V · GND (Lötpunkte) | Geschwindigkeitssignal |
+| BNO085 | Steckplatz, Lötbrücke RVC mode | Kompass und Neigungssensor |
+| qwiic i2c | vin · gnd · scl · sda | I2C (z. B. Relaiskarte MCP23017) |
+| SIMPLERTK2B / BYNAV C2-M20 | Steckplatz | GNSS-Receiver |
+| Ethernet | RJ45 | Netzwerk zu AgOpenGPS |
+| Status-LEDs | A5V · 3.3V · 5V | Versorgungsspannungen auf der Platine |
+
+![Eingänge, CAN-Bus und Abschlusswiderstände](bilder/platine-2026-eingaenge.jpg)
+
+| Anschluss | Klemmen | Funktion |
+|---|---|---|
+| STEER ON/OFF | 5V · E · GND · 12V · S · GND | E = Encoder-Eingang, S = Lenkschalter gegen GND |
+| WORK ON/OFF · REMOTE ON/OFF | W · GND · R · GND | Arbeitsschalter und Remote-Schalter gegen GND |
+| ACTIVE | WORK − + · STEER − + | 12-V-Eingänge für Work und Steer (Optokoppler) |
+| CAN BUS | HI · LO für CAN1, CAN2, CAN3 | 3 CAN-Busse |
+| Can1 · Can2 · Can3 | Schiebeschalter „120ohm TERM ON/OFF“ | Abschlusswiderstand je CAN-Bus |
+| REMOTE LED · WORK LED · STEER LED | a · k (Lötpunkte) | Anschluss für externe LEDs |
+| 5V GND | Lötpunkte | 5-V-Ausgang |
 
 ### USB-Anschluss
 
@@ -168,8 +205,9 @@ Arbeitsschalter, Drucksensor) und die Schaltschwelle werden im Webinterface eing
 
 ![CAN-Bus](bilder/canbus.png)
 
-Je CAN-Bus ist ein 120-Ω-Abschlusswiderstand auf der Platine verbaut; er ist aktiv, wenn der Jumper gesteckt ist.
-Für Allynav-Motoren wird ein Jumper empfohlen und mitgeliefert.
+Je CAN-Bus ist ein 120-Ω-Abschlusswiderstand auf der Platine verbaut. Er wird mit dem Schiebeschalter
+**Can1**, **Can2** bzw. **Can3** („120ohm TERM ON/OFF“) neben der Ethernet-Buchse eingeschaltet.
+Für Allynav-Motoren den Abschlusswiderstand an CAN2 einschalten.
 
 ### Kompass und Neigungssensor
 
