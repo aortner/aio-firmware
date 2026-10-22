@@ -167,7 +167,7 @@ Beschriftung wie auf der Platine.
 | POWER | ON/OFF · LED (a, k) | Einschalter (Brücke) und LED |
 | RELAY | NO · COM · NC (Relais 1 und 2) | 2 Relais, max. 5 A |
 | ANALOG INPUT | 12V · GND · 5V · GND | 0–12-V- und 0–5-V-Analogeingang |
-| TM171 | TX · RX · 5V · GND | serielle Schnittstelle (Anleitung folgt) |
+| TM171 | TX · RX · 5V · GND | serielle Schnittstelle – wird derzeit von der Firmware noch nicht unterstützt (folgt) |
 | WHEEL ANGLE SENSOR | DIF (A1) · SIG · GND · 5V | Lenkwinkelsensor |
 | SPEEDPULSE | 12V · GND (Lötpunkte) | Geschwindigkeitssignal |
 | BNO085 | Steckplatz, Lötbrücke RVC mode | Kompass und Neigungssensor |
