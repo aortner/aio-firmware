@@ -6,6 +6,8 @@ AgOpenGPS AIO-Controller von [www.autosteer.cc](https://www.autosteer.cc) (Teens
 
 ## Inhalt
 
+- [Einbau der PCB](#einbau-der-pcb)
+  - [Dual-System](#dual-system-2-antennen) · [Single-System](#single-system-1-antenne-und-imu)
 - [PCB-Details](#pcb-details)
 - [Technische Daten](#technische-daten)
 - [Anschlüsse](#anschlüsse)
@@ -14,11 +16,33 @@ AgOpenGPS AIO-Controller von [www.autosteer.cc](https://www.autosteer.cc) (Teens
   - [Lenkwinkelsensor](#lenkwinkelsensor) · [Analogeingänge](#12-v--und-5-v-analogeingänge) · [CAN-Bus](#can-bus)
   - [Kompass und Neigungssensor](#kompass-und-neigungssensor) · [GNSS-Receiver](#gnss-receiver) · [Ethernet](#ethernet-anschluss)
   - [Relais](#relais)
+- [AgIO Netzwerkeinstellungen](#agio-netzwerkeinstellungen)
+  - [WLAN bricht ab](#wlan-verbindung-bricht-ab-sobald-agio-verbunden-ist)
 - [Webinterface](#webinterface)
   - [DUAL GNSS](#dual-gnss) · [MCP23017 Relay Card](#mcp23017-relay-card) · [Speed Pulse](#speed-pulse)
   - [Motor Controller](#motor-controller) · [Motor Test](#motor-test) · [CAN-Bus-Lenkung](#can-bus-lenkung) · [Analog 12V](#analog-12v-pin-a13)
   - [PCB Relay Function](#pcb-relay-function) · [Kick PWM und Kick Dauer](#kick-pwm-und-kick-dauer) · [Gyro WAS (in Entwicklung)](#gyro-was-in-entwicklung)
 - [Firmware-Update](#firmware-update)
+
+## Einbau der PCB
+
+### Dual-System (2 Antennen)
+
+Die Position der Platine im Traktor ist egal.
+
+### Single-System (1 Antenne und IMU)
+
+Die Platine muss halbwegs eben und im rechten Winkel zur Fahrtrichtung eingebaut werden. Die Ausrichtung ist egal –
+sie wird nachher in AgOpenGPS eingestellt.
+
+In den **Lenkeinstellungen** (der blaue Pfeil macht das Fenster groß) unter **IMU Achse** die X- oder Y-Achse wählen:
+
+![AgOpenGPS Lenkeinstellungen](bilder/einbau-lenkeinstellungen.png)
+
+Die Nullstellung (eben) und das Invertieren der Neigung werden in der **Configuration** im Bereich IMU eingestellt
+(**Versatz entfernen**, **IMU kalibrieren**, **IMU invertieren**):
+
+![AgOpenGPS Configuration IMU](bilder/einbau-imu.png)
 
 ## PCB-Details
 
@@ -234,6 +258,40 @@ COM wird also zwischen NC und NO umgeschaltet.
 
 Die Funktion der beiden Relais wird im Webinterface unter **PCB Relay 1 Function** bzw. **PCB Relay 2 Function**
 eingestellt (siehe [PCB Relay Function](#pcb-relay-function)).
+
+## AgIO Netzwerkeinstellungen
+
+In AgIO auf das Netzwerk-Symbol drücken (steht auf **Off**):
+
+![AgIO Netzwerk aus](bilder/agio-netzwerk-aus.png)
+
+Im Fenster **Ethernet Configuration** auf **UDP On** drücken (wird grün), dann auf den grünen Haken:
+
+![AgIO UDP On](bilder/agio-udp-on.png)
+
+Das Netzwerk-Symbol ist jetzt grün, darüber stehen die IP-Adressen des PCs. Neuerlich auf das Netzwerk-Symbol klicken:
+
+![AgIO Netzwerk ein](bilder/agio-netzwerk-ein.png)
+
+![AgIO Ethernet Configuration](bilder/agio-ethernet-config.png)
+
+- **IMU** (nur bei Single mit IMU), **Steer** und **GPS** sollten grün sein. Bei Steer wird die IP der Platine
+  angezeigt.
+- **Current Subnet** sollte mit dem Netz übereinstimmen, das zuvor am PC eingestellt wurde. Sonst unter
+  **Enter New Subnet Address** die Adresse einstellen und **Set Subnet** drücken – das Subnetz wird dann an die
+  Platine übertragen.
+
+Die Platine ist ab Werk auf **192.168.1.126** eingestellt, der PC braucht also eine Adresse 192.168.1.xxx.
+
+Weitere Einstellungen der Platine (Motor, Relais usw.) siehe [Webinterface](#webinterface).
+
+### WLAN-Verbindung bricht ab, sobald AgIO verbunden ist
+
+Windows gibt der Kabelverbindung den Vorzug vor dem WLAN und schaltet das WLAN ab. Für AgOpenGPS werden aber beide
+gebraucht. Abhilfe ist eine kleine Änderung in der Windows-Registrierung: Die Datei
+[Network-Drop-Fix.reg](https://raw.githubusercontent.com/AgOpenGPS-Official/Boards/main/Misc/Network-Drop-Fix.reg)
+herunterladen und per Doppelklick importieren, oder die Änderung selbst nach
+[dieser Anleitung](https://discourse.agopengps.com/t/toughpad-book/399/110) vornehmen.
 
 ## Webinterface
 
