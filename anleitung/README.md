@@ -61,7 +61,7 @@ Aktiviert die Platine. Bei Nichtgebrauch die Platine am besten über die Zuleitu
 
 #### Lenkwinkelsensor: grau, 3 × 0,5 mm²
 
-- **Grau:** 5 V
+- **Braun:** 5 V
 - **Grün-gelb:** GND
 - **Blau:** Signal vom Sensor (0–5 V)
 
