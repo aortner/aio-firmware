@@ -16,6 +16,7 @@ AgOpenGPS AIO-Controller von [www.autosteer.cc](https://www.autosteer.cc) (Teens
   - [Lenkwinkelsensor](#lenkwinkelsensor) · [Analogeingänge](#12-v--und-5-v-analogeingänge) · [CAN-Bus](#can-bus)
   - [Kompass und Neigungssensor](#kompass-und-neigungssensor) · [GNSS-Receiver](#gnss-receiver) · [Ethernet](#ethernet-anschluss)
   - [Relais](#relais)
+- [Ethernet-Einstellungen am PC](#ethernet-einstellungen-am-pc)
 - [AgIO Netzwerkeinstellungen](#agio-netzwerkeinstellungen)
   - [WLAN bricht ab](#wlan-verbindung-bricht-ab-sobald-agio-verbunden-ist)
 - [Webinterface](#webinterface)
@@ -258,6 +259,28 @@ COM wird also zwischen NC und NO umgeschaltet.
 
 Die Funktion der beiden Relais wird im Webinterface unter **PCB Relay 1 Function** bzw. **PCB Relay 2 Function**
 eingestellt (siehe [PCB Relay Function](#pcb-relay-function)).
+
+## Ethernet-Einstellungen am PC
+
+Bei Verwendung eines Routers muss vorerst nichts eingestellt werden. Bei einer Direktverbindung mit einem Tablet muss
+die IP-Adresse des Ethernet-Adapters am Tablet fix eingestellt werden. Siehe auch
+[AgOpenGPS Ethernet Setup](https://docs.agopengps.com/software/05.-Ethernet-Setup/).
+
+Rechtsklick auf das Netzwerk-Symbol in der Taskleiste → **Netzwerk- und Interneteinstellungen**:
+
+![Windows Netzwerk-Menü](bilder/windows-netzwerk-menue.png)
+
+**Ethernet** wählen, bei **IP-Zuweisung** auf **Bearbeiten** drücken:
+
+![Windows IP-Zuweisung](bilder/windows-ip-zuweisung.png)
+
+**Manuell** wählen und **IPv4** einschalten:
+
+![Windows IPv4](bilder/windows-ipv4.png)
+
+- **IP-Adresse:** 192.168.1.100 – das ist die Adresse des Tablets
+- **Subnetzmaske:** 255.255.255.0 – fragt Windows stattdessen nach der **Präfixlänge**, dort 24 eintragen
+- **Gateway:** 192.168.1.1
 
 ## AgIO Netzwerkeinstellungen
 
