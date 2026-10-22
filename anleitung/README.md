@@ -6,6 +6,8 @@ AgOpenGPS AIO-Controller von [www.autosteer.cc](https://www.autosteer.cc) (Teens
 
 ## Inhalt
 
+- [Die Box](#die-box)
+  - [Box öffnen](#box-öffnen) · [Zuleitungen](#zuleitungen)
 - [Einbau der PCB](#einbau-der-pcb)
   - [Dual-System](#dual-system-2-antennen) · [Single-System](#single-system-1-antenne-und-imu)
 - [PCB-Details](#pcb-details)
@@ -24,6 +26,51 @@ AgOpenGPS AIO-Controller von [www.autosteer.cc](https://www.autosteer.cc) (Teens
   - [Motor Controller](#motor-controller) · [Motor Test](#motor-test) · [CAN-Bus-Lenkung](#can-bus-lenkung) · [Analog 12V](#analog-12v-pin-a13)
   - [PCB Relay Function](#pcb-relay-function) · [Kick PWM und Kick Dauer](#kick-pwm-und-kick-dauer) · [Gyro WAS (in Entwicklung)](#gyro-was-in-entwicklung)
 - [Firmware-Update](#firmware-update)
+
+## Die Box
+
+Die Platine kommt fertig vorverkabelt in einer Box.
+
+![Box mit vorverkabelter Platine](bilder/box-verkabelt.jpg)
+
+### Box öffnen
+
+Eine Seite und die oberen Schrauben lösen, dann lässt sich der Deckel abschieben.
+
+![Deckel abschieben](bilder/box-deckel.jpg)
+
+### Zuleitungen
+
+#### PCB-Zuleitung: schwarz, 2 × 2,5 mm²
+
+Anschluss am besten an der 3-poligen Steckdose. Die Sicherung gleich nach dem Stecker einbauen.
+
+#### Motor-Zuleitung: schwarz, 2 × 1,5 mm²
+
+Der Anschluss am Motor ist egal – die Drehrichtung kann in AgOpenGPS umgedreht werden (**Motor invertieren** in den
+Lenkeinstellungen, siehe [Einbau der PCB](#single-system-1-antenne-und-imu)).
+
+Auf der Platine befindet sich ein Stromsensor. Er wird in den Lenkeinstellungen unter **Stromsensor Lenkung** nach
+Bedarf aktiviert. Zieht der Motor zu viel Strom, deaktiviert sich die Lenkung.
+
+![Stromsensor Lenkung](bilder/stromsensor-lenkung.png)
+
+#### Ein/Aus-Schalter
+
+Aktiviert die Platine. Bei Nichtgebrauch die Platine am besten über die Zuleitung vom Traktor trennen.
+
+#### Lenkwinkelsensor: grau, 3 × 0,5 mm²
+
+- **Grau:** 5 V
+- **Grün-gelb:** GND
+- **Blau:** Signal vom Sensor (0–5 V)
+
+Die Richtung wird in den Lenkeinstellungen mit **LWS invertieren** umgedreht.
+
+#### Lenkung aktivieren: schwarz, 2 × 0,5 mm²
+
+Kann mit einem Schalter oder einem Taster verwendet werden. In den Lenkeinstellungen unter **Externe Aktivierung**
+einstellen: **Switch** = Schalter (rastend), **Button** = Taster (tastend).
 
 ## Einbau der PCB
 
