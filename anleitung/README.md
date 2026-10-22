@@ -7,7 +7,7 @@ AgOpenGPS AIO-Controller von [www.autosteer.cc](https://www.autosteer.cc) (Teens
 ## Inhalt
 
 - [Die Box](#die-box)
-  - [Box öffnen](#box-öffnen) · [Zuleitungen](#zuleitungen)
+  - [Box öffnen](#box-öffnen) · [Zuleitungen](#zuleitungen) · [Antenne](#antenne)
 - [Einbau der PCB](#einbau-der-pcb)
   - [Dual-System](#dual-system-2-antennen) · [Single-System](#single-system-1-antenne-und-imu)
 - [PCB-Details](#pcb-details)
@@ -22,8 +22,8 @@ AgOpenGPS AIO-Controller von [www.autosteer.cc](https://www.autosteer.cc) (Teens
 - [AgIO Netzwerkeinstellungen](#agio-netzwerkeinstellungen)
   - [WLAN bricht ab](#wlan-verbindung-bricht-ab-sobald-agio-verbunden-ist)
 - [Webinterface](#webinterface)
-  - [DUAL GNSS](#dual-gnss) · [MCP23017 Relay Card](#mcp23017-relay-card) · [Speed Pulse](#speed-pulse)
-  - [Motor Controller](#motor-controller) · [Motor Test](#motor-test) · [CAN-Bus-Lenkung](#can-bus-lenkung) · [Analog 12V](#analog-12v-pin-a13)
+  - [DUAL GNSS](#dual-gnss) · [MCP23017 Relay Card](#mcp23017-relay-card)
+  - [Motor Controller](#motor-controller) · [Motor Test](#motor-test) · [CAN-Bus-Lenkung](#can-bus-lenkung) · [Analog 12V](#analog-12v)
   - [PCB Relay Function](#pcb-relay-function) · [Kick PWM und Kick Dauer](#kick-pwm-und-kick-dauer) · [Gyro WAS (in Entwicklung)](#gyro-was-in-entwicklung)
 - [Firmware-Update](#firmware-update)
 
@@ -74,6 +74,15 @@ einstellen:
 
 - **Schalter** (rastend): Ein = Lenkung an, Aus = Lenkung aus
 - **Taster** (tastend): jedes Drücken ändert den Status – einmal drücken an, nochmal drücken aus
+
+### Antenne
+
+- Bei zwei Antennen in AgOpenGPS unter **Antenna Type** **Dual** auswählen. Fährt der Traktor verkehrt, einfach die
+  beiden Antennenkabel umstecken.
+- Mindestabstand bei Dual 1 m – je größer, desto besser.
+- Vibrationen vermeiden und die Kabel nicht am Auspuff vorbeiführen.
+
+![AgOpenGPS Antenna Type Dual](bilder/antenne-dual.png)
 
 ## Einbau der PCB
 
@@ -171,7 +180,7 @@ Beschriftung wie auf der Platine.
 
 | Anschluss | Klemmen | Funktion |
 |---|---|---|
-| STEER ON/OFF | 5V · E · GND · 12V · S · GND | E–GND = Encoder-Eingang, S–GND = Lenkschalter (potentialfrei) |
+| STEER ON/OFF | 5V · E · GND · 12V · S · GND | E–GND = Encoder-Eingang, S–GND = Lenkschalter (potentialfrei), 12V = 12-V-Ausgang (dazu die Lötbrücke auf der Rückseite der Platine schließen) |
 | WORK ON/OFF · REMOTE ON/OFF | W · GND · R · GND | W–GND = Arbeitsschalter, R–GND = Remote (derzeit ohne Funktion), potentialfrei |
 | ACTIVE | WORK − + · STEER − + | Work und Steer mit 12 V schalten (Optokoppler) |
 | CAN BUS | HI · LO für CAN1, CAN2, CAN3 | 3 CAN-Busse |
@@ -256,12 +265,10 @@ Spannung an (+ auf +, − auf −).
 
 ![Analogeingänge](bilder/analog.jpg)
 
-| Eingang | Teensy-Pin |
-|---|---|
-| Drucksensor 0–5 V | 24 |
-| 12-V-Eingang | 27 |
+- Drucksensor 0–5 V
+- 12-V-Eingang 0–12 V
 
-Die Eingänge gehen über Spannungsteiler auf diese Teensy-Pins. Die Funktion des 12-V-Eingangs (Lenkschalter,
+Die Eingänge gehen über Spannungsteiler auf den Teensy. Die Funktion des 12-V-Eingangs (Lenkschalter,
 Arbeitsschalter, Drucksensor) und die Schaltschwelle werden im Webinterface eingestellt.
 
 **Stromsensor:** ist direkt mit dem Motorcontroller verbunden und kann in AgOpenGPS aktiviert werden.
@@ -386,12 +393,6 @@ Einstellungen wirken sofort und bleiben nach dem Ausschalten gespeichert.
 Aktiviert die optionale **Relaiskarte für 8 Teilbreiten** (I2C-Portexpander MCP23017). Die Relais 1–8 folgen den
 Teilbreiten 1–8 aus AgOpenGPS. Wird die Karte beim Start nicht gefunden, zeigt die Live-Ansicht „MCP23017 NOT FOUND“.
 
-### Speed Pulse
-
-Gibt ein **12-V-Geschwindigkeitssignal** aus (Rechtecksignal, z. B. für Sämaschine oder Spritze):
-**130 Impulse pro Meter** – 3,6 km/h (1 m/s) ergibt 130 Hz. Grundlage ist die GPS-Geschwindigkeit; unter ca.
-0,1 km/h und ohne aktuelle Daten von AgOpenGPS (länger als 1 s) wird kein Signal ausgegeben.
-
 ### Motor Controller
 
 | Einstellung | Motor | Anschluss |
@@ -440,9 +441,9 @@ CAN-Busse belegt sind:
 - **Reset CAN** startet die CAN-Busse neu. **CAN Debug** zeigt die CAN-Nachrichten live (zur Fehlersuche).
 - Abschlusswiderstände (Jumper) je nach Verkabelung am Traktor – siehe [CAN-Bus](#can-bus).
 
-### Analog 12V (Pin A13)
+### Analog 12V
 
-Der 0–12-V-Analogeingang (Teensy-Pin A13 = 27) kann eine von vier Aufgaben übernehmen. Die gemessene Spannung wird
+Der 0–12-V-Analogeingang kann eine von vier Aufgaben übernehmen. Die gemessene Spannung wird
 in der Live-Ansicht angezeigt.
 
 | Einstellung | Was passiert |
@@ -483,8 +484,7 @@ wechselt. Der Kick gibt bei jedem Richtungswechsel einen kurzen, kräftigeren Im
 Ist der geregelte PWM ohnehin größer, bleibt er unverändert. Ein Richtungswechsel zählt erst, wenn er zwei
 Regelzyklen (50 ms) ansteht – so löst Sensorrauschen um den Sollwert keinen Dauer-Kick aus.
 
-Einstellen: mit Kick PWM 0 beginnen, dann langsam erhöhen (z. B. 80–120) bei 20–50 ms, bis der Motor bei kleinen
-Korrekturen sauber anläuft. Zu viel führt zu Zittern um die Spur.
+**Empfehlung: Kick generell aus lassen (Kick PWM 0).** Zu viel Kick führt zu Zittern um die Spur.
 
 ### Gyro WAS (in Entwicklung)
 
