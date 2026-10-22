@@ -69,8 +69,11 @@ Die Richtung wird in den Lenkeinstellungen mit **LWS invertieren** umgedreht.
 
 #### Lenkung aktivieren: schwarz, 2 × 0,5 mm²
 
-Kann mit einem Schalter oder einem Taster verwendet werden. In den Lenkeinstellungen unter **Externe Aktivierung**
-einstellen: **Switch** = Schalter (rastend), **Button** = Taster (tastend).
+Kann mit einem Schalter oder einem Taster verwendet werden, in den Lenkeinstellungen unter **Externe Aktivierung**
+einstellen:
+
+- **Schalter** (rastend): Ein = Lenkung an, Aus = Lenkung aus
+- **Taster** (tastend): jedes Drücken ändert den Status – einmal drücken an, nochmal drücken aus
 
 ## Einbau der PCB
 
