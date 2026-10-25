@@ -23,6 +23,11 @@ Je Hardware-Variante ein Ordner, z. B. `PCB2026/`:
 
 Die Dateien werden automatisch beim Release erzeugt.
 
+## Downloads
+
+Software, Firmware und Konfigurationen für u-blox F9P, ByNav und AgOpenGPS-Werkzeuge liegen in
+[`downloads/`](downloads/README.md).
+
 ## Anleitung
 
 Die Bedienungsanleitung liegt in [`anleitung/`](anleitung/README.md); die Webseite des Controllers verlinkt
