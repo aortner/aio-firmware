@@ -20,6 +20,11 @@ auf **Download** (Pfeil-Symbol) klicken.
 - [`bynav/software/by_connect.zip`](bynav/software/by_connect.zip) – BY_Connect (Windows)
 - [`bynav/firmware/m2_20250926.zip`](bynav/firmware/m2_20250926.zip) – Firmware M2 vom 26.09.2025
 
+## Septentrio
+
+- [`septentrio/mosaic-h_3607411_current_2021-07-26-215202.txt`](septentrio/mosaic-h_3607411_current_2021-07-26-215202.txt) –
+  Konfiguration für mosaic-H (Dual-Antenne) mit AgOpenGPS
+
 ## Werkzeuge
 
 - [`tools/aogconfigomatic-3.zip`](tools/aogconfigomatic-3.zip) – AOGConfigOMatic zum Flashen und Konfigurieren
