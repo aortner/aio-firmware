@@ -13,6 +13,9 @@ auf **Download** (Pfeil-Symbol) klicken.
   - [`agoopenggps_rover_aortner_10hzz_gps_glo_gal_highprec_cog_fw132.txt`](ublox-f9p/konfiguration/agoopenggps_rover_aortner_10hzz_gps_glo_gal_highprec_cog_fw132.txt) – AgOpenGPS
   - [`ortner_cerea_beidu_disable_config_ublox_f9p_fw1.32.txt`](ublox-f9p/konfiguration/ortner_cerea_beidu_disable_config_ublox_f9p_fw1.32.txt) – Cerea
   - [`bluetooth_agopen_rover_aortner_10hzz_gps_glo_gal__bei_highprec_cog.txt`](ublox-f9p/konfiguration/bluetooth_agopen_rover_aortner_10hzz_gps_glo_gal__bei_highprec_cog.txt) – AgOpenGPS über Bluetooth
+  - [`basestation_fw132.txt`](ublox-f9p/konfiguration/basestation_fw132.txt) – Basisstation (Survey-in 2 min / 2,5 m)
+
+Wichtig: Die Konfigurationen passen zur Firmware **1.32**. Neuere Firmware (z. B. 1.51) erlaubt nur bis 8 Hz.
 
 ## ByNav
 
