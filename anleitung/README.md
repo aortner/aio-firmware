@@ -22,7 +22,7 @@ AgOpenGPS AIO-Controller von [www.autosteer.cc](https://www.autosteer.cc) (Teens
 - [AgIO Netzwerkeinstellungen](#agio-netzwerkeinstellungen)
   - [WLAN bricht ab](#wlan-verbindung-bricht-ab-sobald-agio-verbunden-ist)
 - [Webinterface](#webinterface)
-  - [DUAL GNSS](#dual-gnss) · [MCP23017 Relay Card](#mcp23017-relay-card) · [Speed Pulse](#speed-pulse)
+  - [DUAL GNSS](#dual-gnss) · [MCP23017 Relay Card](#mcp23017-relay-card) · [Speed Pulse](#speed-pulse) · [IMU](#imu)
   - [Motor Controller](#motor-controller) · [Motor Test](#motor-test) · [CAN-Bus-Lenkung](#can-bus-lenkung) · [Analog 12V](#analog-12v)
   - [PCB Relay Function](#pcb-relay-function) · [Kick PWM und Kick Dauer](#kick-pwm-und-kick-dauer) · [Gyro WAS (in Entwicklung)](#gyro-was-in-entwicklung)
 - [Firmware-Update](#firmware-update)
@@ -167,7 +167,7 @@ Beschriftung wie auf der Platine.
 | POWER | ON/OFF · LED (a, k) | Einschalter (Brücke) und LED |
 | RELAY | NO · COM · NC (Relais 1 und 2) | 2 Relais, max. 5 A |
 | ANALOG INPUT | 12V · GND · 5V · GND | 0–12-V- und 0–5-V-Analogeingang |
-| TM171 | TX · RX · 5V · GND | serielle Schnittstelle – wird derzeit von der Firmware noch nicht unterstützt (folgt) |
+| TM171 | TX · RX · 5V · GND | serielle Schnittstelle für den Kompass/Neigungssensor TM171 (ab Firmware 1.3.7, siehe [IMU](#imu)) |
 | WHEEL ANGLE SENSOR | DIF (A1) · SIG · GND · 5V | Lenkwinkelsensor |
 | SPEEDPULSE | 12V · GND (Lötpunkte) | Geschwindigkeitssignal |
 | BNO085 | Steckplatz, Lötbrücke RVC mode | Kompass und Neigungssensor |
@@ -288,6 +288,9 @@ Für Allynav-Motoren den Abschlusswiderstand an CAN2 einschalten.
 UART im **RVC-Modus** – wird unterstützt und ist der Standard für den BNO085. Wird der Kompass inkl. Montage
 bestellt, wird er fix auf der Platine verbaut.
 
+Statt des BNO085 kann am Stecker **TM171** ein TM171 (SYD Dynamics) angeschlossen werden. Er wird im Webinterface
+unter [IMU](#imu) ausgewählt.
+
 Daneben liegt der QWIIC-Stecker (**qwiic i2c**) für I2C-Geräte, z. B. die Relaiskarte.
 
 ### GNSS-Receiver
@@ -386,7 +389,7 @@ Einstellungen wirken sofort und bleiben nach dem Ausschalten gespeichert.
 - **Ein:** Alle Daten vom GNSS-Receiver werden **1:1 an AgOpenGPS weitergeleitet** (UDP-Port 9999), ohne Auswertung im
   Controller. Für Receiver, die selbst Position und Heading liefern (z. B. Dual-Antennen-Receiver).
 - **Aus:** Der Controller liest GGA/VTG des Receivers (z. B. F9P Single) und schickt sie zusammen mit Kompass und
-  Neigung (BNO085) an AgOpenGPS.
+  Neigung (BNO085 oder TM171) an AgOpenGPS.
 
 ### MCP23017 Relay Card
 
@@ -404,6 +407,24 @@ Radar-Eingang eines Spritzen- oder Sämaschinen-Computers (ab Firmware 1.3.6).
 - Am Gerät, das das Signal auswertet, **130 Impulse/m** (bzw. 13 000 Impulse/100 m) einstellen.
 - Prüfen: Multimeter mit Frequenzmessung (Hz) an SPEEDPULSE und GND, im AgOpenGPS-Simulator eine Geschwindigkeit
   einstellen.
+
+### IMU
+
+Wählt den Kompass/Neigungssensor (ab Firmware 1.3.7). Die Umschaltung wirkt sofort.
+
+- **BNO085** (Standard): Steckplatz auf der Platine, RVC-Modus.
+- **TM171**: am Stecker **TM171** (TX · RX · 5V · GND).
+
+Die Live-Ansicht zeigt unter **IMU Status**, welcher Sensor gewählt ist und ob er Daten liefert (z. B. „TM171 OK“).
+Heading, Roll und Pitch gehen wie beim BNO085 an AgOpenGPS; IMU-Achse, Nullstellung und Invertieren werden in
+AgOpenGPS eingestellt (siehe [Single-System](#single-system-1-antenne-und-imu)). Bei **DUAL GNSS ein** wird die IMU
+nicht verwendet.
+
+Der TM171 muss vorher einmal mit dem Windows-Programm **ImuAssistant** (USB-C am TM171) eingestellt werden:
+
+- UART ein, **115200** Baud, Ausgaberate **100 Hz**
+- nur **Roll/Pitch/Yaw (RPY)** ausgeben, Raw Data und Status aus
+- danach **Save Settings** drücken, sonst ist die Einstellung nach dem Ausschalten weg
 
 ### Motor Controller
 
