@@ -22,7 +22,7 @@ AgOpenGPS AIO-Controller von [www.autosteer.cc](https://www.autosteer.cc) (Teens
 - [AgIO Netzwerkeinstellungen](#agio-netzwerkeinstellungen)
   - [WLAN bricht ab](#wlan-verbindung-bricht-ab-sobald-agio-verbunden-ist)
 - [Webinterface](#webinterface)
-  - [DUAL GNSS](#dual-gnss) · [MCP23017 Relay Card](#mcp23017-relay-card)
+  - [DUAL GNSS](#dual-gnss) · [MCP23017 Relay Card](#mcp23017-relay-card) · [Speed Pulse](#speed-pulse)
   - [Motor Controller](#motor-controller) · [Motor Test](#motor-test) · [CAN-Bus-Lenkung](#can-bus-lenkung) · [Analog 12V](#analog-12v)
   - [PCB Relay Function](#pcb-relay-function) · [Kick PWM und Kick Dauer](#kick-pwm-und-kick-dauer) · [Gyro WAS (in Entwicklung)](#gyro-was-in-entwicklung)
 - [Firmware-Update](#firmware-update)
@@ -392,6 +392,18 @@ Einstellungen wirken sofort und bleiben nach dem Ausschalten gespeichert.
 
 Aktiviert die optionale **Relaiskarte für 8 Teilbreiten** (I2C-Portexpander MCP23017). Die Relais 1–8 folgen den
 Teilbreiten 1–8 aus AgOpenGPS. Wird die Karte beim Start nicht gefunden, zeigt die Live-Ansicht „MCP23017 NOT FOUND“.
+
+### Speed Pulse
+
+Gibt die Geschwindigkeit aus AgOpenGPS als **Impulssignal** an den Lötpunkten **SPEEDPULSE** aus, z. B. für den
+Radar-Eingang eines Spritzen- oder Sämaschinen-Computers (ab Firmware 1.3.6).
+
+- **130 Impulse pro Meter** (Rechtecksignal), Frequenz = km/h × 36,1
+- Beispiele: 5 km/h = 181 Hz, 10 km/h = 361 Hz, 20 km/h = 722 Hz
+- Unter 0,1 km/h oder ohne Verbindung zu AgOpenGPS (länger als 1 s) wird kein Signal ausgegeben.
+- Am Gerät, das das Signal auswertet, **130 Impulse/m** (bzw. 13 000 Impulse/100 m) einstellen.
+- Prüfen: Multimeter mit Frequenzmessung (Hz) an SPEEDPULSE und GND, im AgOpenGPS-Simulator eine Geschwindigkeit
+  einstellen.
 
 ### Motor Controller
 
