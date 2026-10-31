@@ -1,6 +1,6 @@
 {
-  "version": "1.3.6",
-  "file": "AIO_PCB2026_1.3.6.hex",
-  "notes": "Version 1.3.6: Speed Pulse freigegeben (130 Impulse/m)",
+  "version": "1.3.7",
+  "file": "AIO_PCB2026_1.3.7.hex",
+  "notes": "Version 1.3.7: TM171 als Kompass/Neigungssensor waehlbar (Webinterface -> IMU)",
   "date": "2026-10-31"
 }
