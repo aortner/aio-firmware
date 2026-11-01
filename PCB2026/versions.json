@@ -1,5 +1,12 @@
 [
   {
+    "version": "1.3.8",
+    "file": "AIO_PCB2026_1.3.8.hex",
+    "notes": "Version 1.3.8: Update suchen zeigt alle Versionen (auch aeltere und Beta), Webinterface waehrend der Fahrt gesperrt",
+    "date": "2026-11-01",
+    "beta": false
+  },
+  {
     "version": "1.3.7",
     "file": "AIO_PCB2026_1.3.7.hex",
     "notes": "Version 1.3.7: TM171 als Kompass/Neigungssensor waehlbar (Webinterface -> IMU)",
