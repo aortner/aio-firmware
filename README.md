@@ -7,7 +7,9 @@ Fertige Firmware (.hex) für den AgOpenGPS AIO-Controller von [www.autosteer.cc]
 
 Am einfachsten über die Webseite des Controllers (http://<IP-des-Controllers>) im Bereich **Firmware**:
 
-- **Update suchen** – lädt die neueste Version aus diesem Repo und spielt sie ein. Der Rechner braucht dafür
+- **Update suchen** – zeigt alle Versionen aus diesem Repo (ab Firmware 1.3.8; ältere Firmware bietet nur die
+  neueste an). Jede Zeile hat einen Button **Installieren**: so geht auch der Wechsel auf eine ältere Version
+  (Einstellungen bleiben erhalten) oder auf eine **Beta** (orange markiert, Testversion). Der Rechner braucht dafür
   gleichzeitig Internet (WLAN/Hotspot) und Verbindung zum Controller.
 - **.hex-Datei wählen** – eine vorher heruntergeladene Datei aus diesem Repo einspielen.
 
@@ -18,7 +20,8 @@ Notfalls lässt sich der Teensy immer per USB und Teensy Loader neu flashen.
 
 Je Hardware-Variante ein Ordner, z. B. `PCB2026/`:
 
-- `latest.json` – neueste Version (`version`, `file`, `notes`, `date`)
+- `versions.json` – alle Versionen, neueste zuerst (`version`, `file`, `notes`, `date`, `beta`)
+- `latest.json` – neueste stabile Version (`version`, `file`, `notes`, `date`), für Firmware bis 1.3.7
 - `AIO_<Variante>_<Version>.hex` – Firmware-Dateien
 
 Die Dateien werden automatisch beim Release erzeugt.

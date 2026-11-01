@@ -384,6 +384,10 @@ Im Browser die IP-Adresse des Controllers öffnen (`http://<IP-des-Controllers>`
 Relais, Eingänge usw. eingestellt und Live-Werte angezeigt. Der Button **Anleitung** führt zu dieser Seite.
 Einstellungen wirken sofort und bleiben nach dem Ausschalten gespeichert.
 
+Das Webinterface nur im **Stillstand** verwenden und danach schließen. Ab Firmware 1.3.8 ist es während der
+Fahrt (über 0,5 km/h) und bei aktiver Lenkung gesperrt: Statt der Seite erscheint ein Hinweis, Einstellungen
+lassen sich nicht ändern. Nach dem Anhalten und Ausschalten der Lenkung geht es von selbst weiter.
+
 ### DUAL GNSS
 
 - **Ein:** Alle Daten vom GNSS-Receiver werden **1:1 an AgOpenGPS weitergeleitet** (UDP-Port 9999), ohne Auswertung im
@@ -537,3 +541,7 @@ Lenkung.
 ## Firmware-Update
 
 Über das Webinterface im Bereich **Firmware** – siehe [Update](../README.md#update).
+
+**Update suchen** zeigt ab Firmware 1.3.8 eine Liste aller Versionen: installiert (grün), neuer (blau), Beta
+(orange, Testversion) und älter (grau). Mit **Installieren** lässt sich jede Version einspielen, auch eine ältere,
+falls eine neue Version Probleme macht. Die Einstellungen bleiben dabei erhalten.
