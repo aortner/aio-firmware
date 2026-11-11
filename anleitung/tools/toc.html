@@ -1,0 +1,32 @@
+<script>
+// Highlight the table-of-contents entry of the section currently being read.
+(function () {
+  var links = Array.prototype.slice.call(document.querySelectorAll('nav#TOC a[href^="#"]'));
+  var items = links.map(function (a) {
+    return { a: a, h: document.getElementById(decodeURIComponent(a.getAttribute('href').slice(1))) };
+  }).filter(function (x) { return x.h; });
+  if (!items.length) return;
+  var current = null, ticking = false;
+  function update() {
+    ticking = false;
+    var y = window.innerHeight * 0.25, hit = items[0];
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].h.getBoundingClientRect().top <= y) hit = items[i]; else break;
+    }
+    if (hit === current) return;
+    if (current) current.a.classList.remove('active');
+    hit.a.classList.add('active');
+    current = hit;
+    var nav = document.getElementById('TOC');
+    if (nav && getComputedStyle(nav).position === 'fixed') {
+      var r = hit.a.getBoundingClientRect(), n = nav.getBoundingClientRect();
+      if (r.top < n.top + 40 || r.bottom > n.bottom - 40) {
+        nav.scrollTop += r.top - n.top - n.height / 2;
+      }
+    }
+  }
+  window.addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+  window.addEventListener('resize', update);
+  update();
+})();
+</script>

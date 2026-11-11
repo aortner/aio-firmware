@@ -1,6 +1,6 @@
 # AIO-Controller – PCB Version 2026
 
-AgOpenGPS AIO-Controller von [www.autosteer.cc](https://www.autosteer.cc) (Teensy 4.1).
+AgOpenGPS AIO-Controller von [www.autosteer.cc](https://www.autosteer.cc) (Teensy 4.1). [English version](en/README.md)
 
 ![Platine PCB Version 2026](bilder/platine-2026.jpg)
 
