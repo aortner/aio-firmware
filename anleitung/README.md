@@ -33,6 +33,13 @@ AgOpenGPS AIO-Controller von [www.autosteer.cc](https://www.autosteer.cc) (Teens
 
 Die Platine kommt fertig vorverkabelt in einer Box.
 
+| Leitung | Länge | Querschnitt |
+|---|---|---|
+| Zuleitung mit 3-poligem Stecker | 2 m | 2 × 2,5 mm² |
+| Lenkwinkelsensor (Kabel mit Schutzschlauch) | 5 m | 3 × 0,75 mm² |
+| Motorzuleitung | 3 m | 2 × 1,5 mm² |
+| Steer-Switch (Lenkung aktivieren) | 2 m | 2 × 0,75 mm² |
+
 ![Box mit vorverkabelter Platine](bilder/box-verkabelt.jpg)
 
 ### Box öffnen
@@ -61,7 +68,7 @@ Bedarf aktiviert. Zieht der Motor zu viel Strom, deaktiviert sich die Lenkung.
 
 Aktiviert die Platine. Bei Nichtgebrauch die Platine am besten über die Zuleitung vom Traktor trennen.
 
-#### Lenkwinkelsensor: grau, 3 × 0,5 mm²
+#### Lenkwinkelsensor: grau, 3 × 0,75 mm²
 
 - **Braun:** 5 V
 - **Grün-gelb:** GND
@@ -69,7 +76,7 @@ Aktiviert die Platine. Bei Nichtgebrauch die Platine am besten über die Zuleitu
 
 Die Richtung wird in den Lenkeinstellungen mit **LWS invertieren** umgedreht.
 
-#### Lenkung aktivieren: schwarz, 2 × 0,5 mm²
+#### Lenkung aktivieren: schwarz, 2 × 0,75 mm²
 
 Kann mit einem Schalter oder einem Taster verwendet werden, in den Lenkeinstellungen unter **Externe Aktivierung**
 einstellen:

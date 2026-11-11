@@ -33,6 +33,13 @@ AgOpenGPS AIO controller from [www.autosteer.cc](https://www.autosteer.cc) (Teen
 
 The PCB comes pre-wired in a box.
 
+| Cable | Length | Cross-section |
+|---|---|---|
+| Power cable with 3-pin plug | 2 m | 2 × 2.5 mm² |
+| Steering angle sensor (cable in protective hose) | 5 m | 3 × 0.75 mm² |
+| Motor cable | 3 m | 2 × 1.5 mm² |
+| Steer switch (engage steering) | 2 m | 2 × 0.75 mm² |
+
 ![Box with pre-wired PCB](../bilder/box-verkabelt.jpg)
 
 ### Opening the box
@@ -61,7 +68,7 @@ the motor draws too much current, steering is disengaged.
 
 Turns the PCB on. When not in use, it is best to disconnect the PCB from the tractor via the power cable.
 
-#### Steering angle sensor: grey, 3 × 0.5 mm²
+#### Steering angle sensor: grey, 3 × 0.75 mm²
 
 - **Brown:** 5 V
 - **Green-yellow:** GND
@@ -69,7 +76,7 @@ Turns the PCB on. When not in use, it is best to disconnect the PCB from the tra
 
 The direction is reversed in the steering settings with **Invert WAS**.
 
-#### Engage steering: black, 2 × 0.5 mm²
+#### Engage steering: black, 2 × 0.75 mm²
 
 Can be used with a switch or a push button; set it in the steering settings under **External engage**:
 
