@@ -18,6 +18,11 @@ function Pandoc(doc)
   return doc
 end
 
+-- the "🌐 website" hint is only meant for the GitHub view
+function Para(el)
+  if pandoc.utils.stringify(el):match("^🌐") then return {} end
+end
+
 function Link(el)
   local text = pandoc.utils.stringify(el)
   -- language links are replaced by the switcher at the top right of the site

@@ -2,6 +2,8 @@
 
 AgOpenGPS AIO-Controller von [www.autosteer.cc](https://www.autosteer.cc) (Teensy 4.1). [English version](en/README.md)
 
+🌐 **[Zur Webseite mit Inhaltsverzeichnis](https://aortner.github.io/aio-firmware/)**
+
 ![Platine PCB Version 2026](bilder/platine-2026.jpg)
 
 ## Inhalt
