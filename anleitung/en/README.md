@@ -24,9 +24,9 @@ AgOpenGPS AIO controller from [www.autosteer.cc](https://www.autosteer.cc) (Teen
 - [AgIO Network Settings](#agio-network-settings)
   - [Wi-Fi drops](#wi-fi-drops-as-soon-as-agio-connects)
 - [Web Interface](#web-interface)
-  - [DUAL GNSS](#dual-gnss) · [MCP23017 Relay Card](#mcp23017-relay-card) · [Speed Pulse](#speed-pulse) · [IMU](#imu)
+  - [DUAL GNSS](#dual-gnss) · [Heading/Roll with IMU](#headingroll-with-imu) · [MCP23017 Relay Card](#mcp23017-relay-card) · [Speed Pulse](#speed-pulse) · [IMU](#imu)
   - [Motor Controller](#motor-controller) · [Motor Test](#motor-test) · [CAN bus steering](#can-bus-steering) · [Analog 12V](#analog-12v)
-  - [PCB Relay Function](#pcb-relay-function) · [Kick PWM and Kick Duration](#kick-pwm-and-kick-duration) · [Gyro WAS (in development)](#gyro-was-in-development)
+  - [PCB Relay Function](#pcb-relay-function) · [Kick PWM and Kick Duration](#kick-pwm-and-kick-duration) · [Allynav encoder](#allynav-encoder-instead-of-steering-angle-sensor) · [Gyro WAS (in development)](#gyro-was-in-development)
 - [Firmware Update](#firmware-update)
 
 ## The Box
@@ -399,6 +399,18 @@ changed. After stopping and disengaging steering it continues by itself.
 - **Off:** the controller reads GGA/VTG from the receiver (e.g. F9P single) and sends them to AgOpenGPS together with
   compass and roll (BNO085 or TM171).
 
+### Heading/Roll with IMU
+
+Switch **Heading/Roll mit IMU**, only visible with **DUAL GNSS on** (from firmware 1.3.10). For dual receivers that output the **$KSXT** sentence. The
+controller blends the receiver's heading and roll with the IMU (BNO085 or TM171):
+
+- **Smoother:** on rough ground, heading and roll sent to AgOpenGPS fluctuate much less, without delay.
+- **Bridging:** if the dual heading drops out (e.g. under trees), the controller carries on with the IMU for up to
+  5 minutes. There is no heading jump when the antenna comes back.
+- **Off** (default): heading and roll come unchanged from the receiver.
+
+The IMU must be mounted level. Recommendation: **switch it on**.
+
 ### MCP23017 Relay Card
 
 Enables the optional **relay card for 8 sections** (MCP23017 I2C port expander). Relays 1–8 follow sections 1–8 from
@@ -524,9 +536,33 @@ control cycles (50 ms) – so sensor noise around the setpoint does not cause a 
 
 **Recommendation: generally leave the kick off (Kick PWM 0).** Too much kick causes jitter around the line.
 
+### Allynav encoder instead of steering angle sensor
+
+Switch **Allynav-Encoder statt Lenkwinkelsensor**, only visible with motor controller **Allynav** (from firmware
+1.3.10). The steering angle then comes from the position
+encoder in the Allynav steering motor; no steering angle sensor is needed.
+
+Requirement: dual receiver with **$KSXT** (DUAL GNSS on). It does not work yet with one antenna and IMU
+(e.g. F9P + BNO085).
+
+- **Off** (default): steering uses the steering angle sensor.
+- **On**: steering uses the encoder. The **Lenkwinkel-Quelle** (steering angle source) card shows **MOTOR**.
+
+**Zero point:** the encoder forgets its position when switched off. After every power-up, drive straight for a few
+seconds until the **Motor-Encoder** card shows "Nullpunkt 30/30" – autosteer does not engage before that. After that
+the controller keeps tracking the zero point against GPS (the steering hydraulics slip a little). **Zero WAS** in
+AgOpenGPS is not needed; it only starts a new learning run.
+
+Set up in AgOpenGPS as for a steering angle sensor: **Counts per Degree** about 95–100, Ackermann and **Invert WAS**
+(steering right = positive angle). Only switch with steering disengaged.
+
+Tip for Allynav (encoder or steering angle sensor): **Proportional Gain** in AgOpenGPS around **55**,
+**Minimum PWM** around **15**. With a gain around 30 the steering reacts sluggishly to small deviations.
+
 ### Gyro WAS (in development)
 
-> **In development – not for normal operation.** Off by default.
+> **In development – not for normal operation.** Off by default. From firmware 1.3.10 temporarily locked: the
+> **Gyro WAS (FSS-G200)** switch cannot be switched on.
 
 Instead of a steering angle sensor, a gyro sensor on the steering knuckle (Forsense FSS-G200, CAN) is to determine
 the steering angle together with the GNSS heading. The **Gyro WAS** switch enables the function:

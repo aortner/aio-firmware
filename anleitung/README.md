@@ -24,9 +24,9 @@ AgOpenGPS AIO-Controller von [www.autosteer.cc](https://www.autosteer.cc) (Teens
 - [AgIO Netzwerkeinstellungen](#agio-netzwerkeinstellungen)
   - [WLAN bricht ab](#wlan-verbindung-bricht-ab-sobald-agio-verbunden-ist)
 - [Webinterface](#webinterface)
-  - [DUAL GNSS](#dual-gnss) · [MCP23017 Relay Card](#mcp23017-relay-card) · [Speed Pulse](#speed-pulse) · [IMU](#imu)
+  - [DUAL GNSS](#dual-gnss) · [Heading/Roll mit IMU](#headingroll-mit-imu) · [MCP23017 Relay Card](#mcp23017-relay-card) · [Speed Pulse](#speed-pulse) · [IMU](#imu)
   - [Motor Controller](#motor-controller) · [Motor Test](#motor-test) · [CAN-Bus-Lenkung](#can-bus-lenkung) · [Analog 12V](#analog-12v)
-  - [PCB Relay Function](#pcb-relay-function) · [Kick PWM und Kick Dauer](#kick-pwm-und-kick-dauer) · [Gyro WAS (in Entwicklung)](#gyro-was-in-entwicklung)
+  - [PCB Relay Function](#pcb-relay-function) · [Kick PWM und Kick Dauer](#kick-pwm-und-kick-dauer) · [Allynav-Encoder](#allynav-encoder-statt-lenkwinkelsensor) · [Gyro WAS (in Entwicklung)](#gyro-was-in-entwicklung)
 - [Firmware-Update](#firmware-update)
 
 ## Die Box
@@ -404,6 +404,18 @@ lassen sich nicht ändern. Nach dem Anhalten und Ausschalten der Lenkung geht es
 - **Aus:** Der Controller liest GGA/VTG des Receivers (z. B. F9P Single) und schickt sie zusammen mit Kompass und
   Neigung (BNO085 oder TM171) an AgOpenGPS.
 
+### Heading/Roll mit IMU
+
+Nur sichtbar bei **DUAL GNSS ein** (ab Firmware 1.3.10). Für Dual-Receiver, die den Satz **$KSXT** ausgeben. Der
+Controller mischt Heading und Roll des Receivers mit der IMU (BNO085 oder TM171):
+
+- **Ruhiger:** Auf unebenem Boden schwanken Heading und Roll an AgOpenGPS deutlich weniger, ohne Verzögerung.
+- **Überbrückung:** Fällt das Dual-Heading aus (z. B. unter Bäumen), rechnet der Controller bis zu 5 Minuten mit der
+  IMU weiter. Beim Zurückkommen der Antenne gibt es keinen Kurssprung.
+- **Aus** (Standard): Heading und Roll kommen unverändert vom Receiver.
+
+Die IMU muss waagrecht eingebaut sein. Empfehlung: **einschalten**.
+
 ### MCP23017 Relay Card
 
 Aktiviert die optionale **Relaiskarte für 8 Teilbreiten** (I2C-Portexpander MCP23017). Die Relais 1–8 folgen den
@@ -532,9 +544,32 @@ Regelzyklen (50 ms) ansteht – so löst Sensorrauschen um den Sollwert keinen D
 
 **Empfehlung: Kick generell aus lassen (Kick PWM 0).** Zu viel Kick führt zu Zittern um die Spur.
 
+### Allynav-Encoder statt Lenkwinkelsensor
+
+Nur sichtbar bei Motor Controller **Allynav** (ab Firmware 1.3.10). Den Lenkwinkel liefert dann der Positionsgeber
+(Encoder) im Allynav-Lenkmotor, ein Lenkwinkelsensor ist nicht nötig.
+
+Voraussetzung: Dual-Receiver mit **$KSXT** (DUAL GNSS ein). Mit einer Antenne und IMU (z. B. F9P + BNO085) geht es
+noch nicht.
+
+- **Aus** (Standard): gelenkt wird mit dem Lenkwinkelsensor.
+- **Ein**: gelenkt wird mit dem Encoder. Die Karte **Lenkwinkel-Quelle** zeigt **MOTOR**.
+
+**Nullpunkt:** Der Encoder vergisst seine Stellung beim Ausschalten. Nach jedem Einschalten einige Sekunden geradeaus
+fahren, bis die Karte **Motor-Encoder** „Nullpunkt 30/30“ zeigt – vorher lenkt Autosteer nicht. Danach führt der
+Controller den Nullpunkt laufend mit dem GPS nach (die Lenkhydraulik rutscht etwas durch). **Zero WAS** in AgOpenGPS
+ist nicht nötig, es startet nur ein neues Lernen.
+
+In AgOpenGPS wie bei einem Lenkwinkelsensor einstellen: **Counts per Degree** etwa 95–100, Ackermann und
+**Invert WAS** (nach rechts lenken = positiver Winkel). Umschalten nur bei ausgeschalteter Lenkung.
+
+Tipp für Allynav (Encoder oder Lenkwinkelsensor): **Proportional Gain** in AgOpenGPS um **55**, **Minimum PWM** um
+**15**. Mit einem Gain um 30 reagiert die Lenkung bei kleinen Abweichungen träge.
+
 ### Gyro WAS (in Entwicklung)
 
-> **In Entwicklung – nicht für den normalen Betrieb.** Standardmäßig ausgeschaltet.
+> **In Entwicklung – nicht für den normalen Betrieb.** Standardmäßig ausgeschaltet. Ab Firmware 1.3.10 vorerst
+> gesperrt: Der Schalter **Gyro WAS (FSS-G200)** lässt sich nicht einschalten.
 
 Statt eines Lenkwinkelsensors soll ein Gyro-Sensor am Achsschenkel (Forsense FSS-G200, CAN) zusammen mit dem
 GNSS-Heading den Lenkwinkel bestimmen. Mit dem Schalter **Gyro WAS** wird die Funktion freigeschaltet:
