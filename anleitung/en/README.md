@@ -542,8 +542,11 @@ Switch **Allynav-Encoder statt Lenkwinkelsensor**, only visible with motor contr
 1.3.10). The steering angle then comes from the position
 encoder in the Allynav steering motor; no steering angle sensor is needed.
 
-Requirement: dual receiver with **$KSXT** (DUAL GNSS on). It does not work yet with one antenna and IMU
-(e.g. F9P + BNO085).
+Requirement, one of the two options:
+- dual receiver with **$KSXT** (DUAL GNSS on), or
+- one antenna with IMU, e.g. **F9P + BNO085** (DUAL GNSS off, from firmware 1.3.10-beta2). The controller detects the
+  driving direction by itself after a few seconds of driving with some steering movement. The **Motor-Encoder** card
+  then shows "Richtung V" (forward) or "R" (reverse).
 
 - **Off** (default): steering uses the steering angle sensor.
 - **On**: steering uses the encoder. The **Lenkwinkel-Quelle** (steering angle source) card shows **MOTOR**.

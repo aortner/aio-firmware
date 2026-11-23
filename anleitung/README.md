@@ -549,8 +549,11 @@ Regelzyklen (50 ms) ansteht – so löst Sensorrauschen um den Sollwert keinen D
 Nur sichtbar bei Motor Controller **Allynav** (ab Firmware 1.3.10). Den Lenkwinkel liefert dann der Positionsgeber
 (Encoder) im Allynav-Lenkmotor, ein Lenkwinkelsensor ist nicht nötig.
 
-Voraussetzung: Dual-Receiver mit **$KSXT** (DUAL GNSS ein). Mit einer Antenne und IMU (z. B. F9P + BNO085) geht es
-noch nicht.
+Voraussetzung, eine der beiden Varianten:
+- Dual-Receiver mit **$KSXT** (DUAL GNSS ein), oder
+- eine Antenne mit IMU, z. B. **F9P + BNO085** (DUAL GNSS aus, ab Firmware 1.3.10-beta2). Die Fahrtrichtung erkennt
+  der Controller nach ein paar Sekunden Fahrt mit etwas Lenkbewegung selbst. Die Karte **Motor-Encoder** zeigt dann
+  „Richtung V“ (vorwärts) oder „R“ (rückwärts).
 
 - **Aus** (Standard): gelenkt wird mit dem Lenkwinkelsensor.
 - **Ein**: gelenkt wird mit dem Encoder. Die Karte **Lenkwinkel-Quelle** zeigt **MOTOR**.
